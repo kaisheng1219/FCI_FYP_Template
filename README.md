@@ -2,20 +2,60 @@
 
 This is an *unofficial* template for FCI FYP Report. 
 
-This current version is based on the [FCI FYP Guideline from 2016/17 session](https://github.com/kuanhoong/FCI_FYP_Template/files/804514/85091_Final.Year.Project.Guidelines_V4_20160706.pdf). Please check the latest guideline for potential changes in copyright, declaration, formattings, and etc.
+This current version is based on the [FCI FYP Guideline from 2022/23 session](https://github.com/kaisheng1219/FCI_FYP_Template/blob/master/reportGuideline.pdf). Please check the latest guideline for potential changes in copyright, declaration, formattings, and etc.
 
-*This template is modified from IPS Postgraduate Thesis template. (Credit to: Lim Lian Tze)*
+*This template is modified from FCI FYP Template. (Credit to: Dr. Poo Kuan Hoong)*
 
-## Recommended: Overleaf
+## Overleaf or Local LaTeX Environment
 
-Instead of installing a local version of LaTeX (can be as big as 3GB), consider to just use [Overleaf](https://www.overleaf.com) - like Google Docs for LaTeX. It's free as long as you have <= 60 files (just delete sample images you should be fine).
+Although Overleaf is recommended by most students, the basic version of it has a compilation timeout issue. If you are expecting yourself inserting many high reso images into your report, then it is not recommended to use Overleaf. Set up the LaTeX environment on your pc as this allows you to compile faster and has no limitations on whatsoever.
 
-## For Windows
+## Setting Up LaTeX Environment 
 
-1. Install [MikTex](http://miktex.org/download) and Install [TexMaker](http://www.xm1math.net/texmaker/download.html) 
-2. Open and edit thesis.tex file. Edit the `\author`, `\title`, `\submissionyear`, `\submissionmonth`, `\degree`, `\major`, `\session` accordingly.
-3. Edit the rest of the files accordingly.
-4. To include a new chapter, simply create a new `.tex` file and make sure you include the link to the file to `thesis.tex` by including the command `\include{newchapter}`
+### For Windows and MacOS
+
+1. Install TexLive from (https://www.tug.org/texlive/windows.html)
+2. Install Visual Studio Code from (https://code.visualstudio.com/download)
+3. Open up Visual Studio Code and install LaTeX Workshop extension
+4. Press Ctrl + Shift + P for Windows or Cmd + Shift + P for MacOS
+5. Go to the bottom and insert the following json codes, make sure there is a comma before you paste the codes
+```json
+"latex-workshop.latex.tools": [
+    {
+        "name": "pdflatex",
+        "command": "pdflatex",
+        "args": [
+            "-synctex=1",
+            "-interaction=nonstopmode",
+            "-file-line-error",
+            "-output-directory=%OUTDIR%",
+            "%DOC%"
+        ]
+    },
+    {
+        "name": "bibtex",
+        "command": "bibtex",
+        "args": [
+            "%DOCFILE%"
+        ],
+        "env": {}
+    }
+],
+"latex-workshop.latex.recipes": [
+    {
+        "name": "pdflatex", 
+        "tools": [
+            "pdflatex",
+            "bibtex",
+            "pdflatex",
+            "pdflatex"
+        ]
+    }
+]
+```
+7. Open and edit thesis.tex file. Edit the `\author`, `\title`, `\submissionyear`, `\submissionmonth`, `\degree`, `\major`, `\session` accordingly.
+8. Edit the rest of the files accordingly.
+9. To include a new chapter, simply create a new `.tex` file and make sure you include the link to the file to `thesis.tex` by including the command `\include{newchapter}`
 
 ## For Debian/Ubuntu
 
@@ -25,10 +65,6 @@ Instead of installing a local version of LaTeX (can be as big as 3GB), consider 
   $ sudo apt-get install texlive-full
   $ sudo apt-get install texmaker
   ```
-
-## For macOS
-
-1. Install [MacTex](https://tug.org/mactex/) (approx 3GB) and [TexMaker](http://www.xm1math.net/texmaker/download.html#macosx) (31.2MB).
 
 ## Compiling with Makefile
 
@@ -40,5 +76,3 @@ On Mac, it will open the PDF upon completion. Sublime Text users can just build 
   $ cd path/to/your-tex-project
   $ make
   ```
-
-Contact kuanhoong AT gmail DOT com if you have any questions or assistance or feedback. Reply may be delayed, thus patience is required!
