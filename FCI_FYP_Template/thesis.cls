@@ -1,4 +1,4 @@
-%% thesis.cls 2013/06/28 version V1.0
+%% thesis.cls 2023/02/20 version V1.0
 %% 
 %% This is the unofficial MMU thesis LaTeX class 
 %% FCI Final Year Project Report I and II
@@ -10,27 +10,22 @@
 %% 
 %% The latest version and documentation of mmu can %% be obtained at
 %% http://goo.gl/Ydfty.
-%% Contact kuanhoong AT gmail DOT com if you have
+%% Contact 1201302264@student.mmu.edu.my if you have
 %% any questions or assistance or feedback.  
 %% Reply may be delayed thus patience is required!
 %%
 %%
 %% Copyright (c) 2013 by Poo Kuan Hoong
 %%
-%% Current maintainer: Poo Kuan Hoong 
-%% (kuanhoong@gmail.com)
-%
-%  BRIEF CHANGELOG
-%  ===============
-% v1.0 June 28 2013
-% - First release (with a really awful manual)
+%% Current maintainer: Ng Kai Sheng
+%% (1201302264@student.mmu.edu.my)
 %
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{thesis}[2013/06/28 LaTeX2e class for MMU FCI FYP Report v1.0.  Copyright (c) 2013 Poo Kuan Hoong (kuanhoong@gmail.com)]
 
 \LoadClass[12pt,a4paper,oneside]{memoir}
 \RequirePackage{textcomp}
-
+\RequirePackage{pdfpages}
 %%%%%%%%%%%%%%%%%%%%%%%
 %% Set Date to dd:mm:yyyy
 %%
@@ -154,7 +149,6 @@ FACULTY OF COMPUTING AND INFORMATICS\\
 MULTIMEDIA UNIVERSITY\par%
 \MakeUppercase{\@mtsubmissionmonth}\ \@mtsubmissionyear\par%
 \end{titlingpage}%
-\clearpage\hspace{1em}\thispagestyle{empty}\clearpage%%Hack to insert blank page
 {\centering\thispagestyle{empty}\setcounter{page}{1}%
 {\SingleSpacing\LARGE\MakeUppercase{\thetitle}\par}%
 \vfill%
@@ -205,39 +199,29 @@ FOR}\\%
 \fontsize{12pt}{12pt}\selectfont\textcopyright ~ \@mtsubmissionyear ~ University Telekom Sdn. Bhd. ALL RIGHTS RESERVED.
 \end{tabular}%
 \par}
-\end{vplace}\clearpage%
+\end{vplace}
+\newpage%
 }
 
 
 %%%%%%%%%%%%
 % The Declaration page
 %%%%%%%%%%%%
-\newcommand{\declarationpage}{%
-\chapter{Declaration}\vskip-\onelineskip
-I hereby declare that the work has been done by myself and no portion of the work contained in this Thesis has been submitted in support of any application for any other degree or qualification on this or any other university or institution of learning.\\[3\onelineskip]
-\newlength\siglinelength
-\settowidth{\siglinelength}{\bfseries\normalsize\theauthor}
-\noindent\rule{\siglinelength}{.6pt}\\{\bfseries\normalsize\theauthor}\\
-Faculty of Computing and Informatics\\
-Multimedia University\\
-Date: \todayiso
-\clearpage
-}
+\newcommand{\declarationpage}{
+\renewcommand{\chapterheadstart}{\vspace*{\fill}}
+\chapter{Declaration}\vskip-\onelineskip 
+I hereby declare that the work has been done by myself and no portion of the work contained in this thesis has been submitted in support of any application for any other degree or qualification on this or any other university or institution of learning.\\[3\onelineskip]\newlength\siglinelength\settowidth{\siglinelength}{\bfseries\normalsize\theauthor}\noindent\rule{\siglinelength}{.6pt}\\{\bfseries\normalsize\theauthor}\\Faculty of Computing and Informatics\\Multimedia University\\Date: \todayiso\vfill\newpage}
 
 %%%%%%%%%%%%
 % The Acknowledgements (typeset like chapter?)
 %%%%%%%%%%%%
-\newcommand{\acknowledgements}[1]{\chapter{Acknowledgements}\vskip-\onelineskip #1}
-
-%%%%%%%%%%%%
-% The dedication (??? formatting???)
-%%%%%%%%%%%%
-\newcommand{\dedication}[1]{\newpage\hspace{1em}%
-\phantomsection%
-\ifpdf\pdfbookmark{Dedication}{dedication}\fi%
-\cftaddtitleline{toc}{chapter}{DEDICATION}{\thepage}%
-\begin{vplace}[.5]\centering#1\end{vplace}%
-\clearpage}
+\newcommand{\acknowledgements}[1]{%
+\renewcommand{\chapterheadstart}{\vspace*{\fill}}
+\chapter{Acknowledgements}\vskip-\onelineskip 
+#1
+\vfill
+\newpage%
+}
 
 
 %%%%%%%%%%%%
@@ -252,7 +236,7 @@ Date: \todayiso
 \renewcommand\abstracttextfont{\normalsize}
 \setlength\absleftindent{0pt}
 \setlength\absrightindent{0pt}
-\newcommand{\abstractfromfile}[1]{\begin{abstract}\input{#1}\end{abstract}}
+\newcommand{\abstractfromfile}[1]{\vspace*{\fill}\begin{abstract}\input{#1}\end{abstract}\vspace*{\fill}\renewcommand{\chapterheadstart}{\vspace*{0cm}}\newpage}
 
 %%%%%%%%%%%%
 % The Preface
@@ -279,7 +263,7 @@ Date: \todayiso
 % The Appendices
 %%%%%%%%%%%%
 \renewcommand*\appendixname{Appendix}
-\addtodef\appendix{}{\renewcommand\chaptername{\appendixname}}
+\addtodef\appendix{}{\renewcommand\chaptername{\vspace*{\fill}\appendixname}}
 
 %%%%%%%%%%%%
 % Sectional headings
@@ -353,6 +337,14 @@ Date: \todayiso
 % - Double spacing between entries
 %%%%%%%%%%%%
 \RequirePackage[nosectionbib]{apacite}
+\RequirePackage{etoolbox}
+\makeatletter
+\newcounter{bibcount}
+\renewcommand{\thebibcount}{[\arabic{bibcount}]} % format number
+\patchcmd{\@lbibitem}{\item[}{\item[\stepcounter{bibcount}{\hss\llap{\thebibcount}\quad}}{}{}
+\setlength{\bibleftmargin}{2em}
+\setlength{\bibindent}{-\bibleftmargin}
+\makeatother
 % new counter for enumerating bibitems
 \newcounter{lbibcount} 
 \bibliographystyle{apacite}
@@ -400,5 +392,3 @@ Date: \todayiso
 \renewcommand{\glossarypreamble}{\footnotesize\vspace*{-\onelineskip}}
 \renewcommand{\glossarypostamble}{\normalsize}
 \makeglossaries
-
-\AtEndDocument{\clearpage\hspace{1em}\thispagestyle{empty}\clearpage}
